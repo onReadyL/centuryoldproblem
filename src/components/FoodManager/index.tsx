@@ -29,7 +29,10 @@ export const FoodManager: React.FC<FoodManagerProps> = ({
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [editingFood, setEditingFood] = useState<EditingFood | null>(null);
-  const [newFood, setNewFood] = useState<SimpleFoodItem>({ name: '', category: categories[0] });
+  const [newFood, setNewFood] = useState<SimpleFoodItem>({
+    name: '',
+    category: categories[0].name,
+  });
   const [isAddMode, setIsAddMode] = useState(false);
 
   const filteredFoods = foods.filter(
