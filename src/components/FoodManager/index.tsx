@@ -83,7 +83,7 @@ export const FoodManager: React.FC<FoodManagerProps> = ({
         `${foodToDelete.category}分类下已没有菜品，是否删除该分类？`
       );
       if (shouldDeleteCategory) {
-        const newCategories = categories.filter(c => c !== foodToDelete.category);
+        const newCategories = categories.filter(c => c.name !== foodToDelete.category); // 修改为 c.name
         onCategoriesChange(newCategories);
         message.success('分类已删除');
       }
@@ -102,7 +102,7 @@ export const FoodManager: React.FC<FoodManagerProps> = ({
     }
 
     onFoodsChange([...foods, { ...newFood, name: newFood.name.trim() }]);
-    setNewFood({ name: '', category: categories[0] });
+    setNewFood({ name: '', category: categories[0].name });
     setIsAddMode(false);
     message.success('添加成功');
   };
@@ -139,8 +139,8 @@ export const FoodManager: React.FC<FoodManagerProps> = ({
             style={{ width: 120 }}
           >
             {categories.map(category => (
-              <Select.Option key={category} value={category}>
-                {category}
+              <Select.Option key={category.id} value={category.name}>
+                {category.name}
               </Select.Option>
             ))}
           </Select>
@@ -196,16 +196,20 @@ export const FoodManager: React.FC<FoodManagerProps> = ({
               allowClear
             >
               {categories.map(category => (
-                <Select.Option key={category} value={category}>
-                  {category}
+                <Select.Option key={category.id} value={category.name}>
+                  {category.name}
                 </Select.Option>
               ))}
             </Select>
           </Space>
           <Space>
             <CategoryManager
-              categories={categories}
-              onCategoriesChange={onCategoriesChange}
+              categories={categories.map(category => category.name)} // 修改为只传递分类名称
+              onCategoriesChange={(newCategories: string[]) => {
+                // 将 string[] 转换为 SimpleCategory[]
+                const updatedCategories = newCategories.map(name => ({ name }) as SimpleCategory);
+                onCategoriesChange(updatedCategories);
+              }}
               foods={foods}
             />
             <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsAddMode(true)}>
@@ -229,8 +233,8 @@ export const FoodManager: React.FC<FoodManagerProps> = ({
                 style={{ width: 120 }}
               >
                 {categories.map(category => (
-                  <Select.Option key={category} value={category}>
-                    {category}
+                  <Select.Option key={category.id} value={category.name}>
+                    {category.name}
                   </Select.Option>
                 ))}
               </Select>
