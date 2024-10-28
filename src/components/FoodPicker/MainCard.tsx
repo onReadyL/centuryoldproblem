@@ -1,5 +1,6 @@
+import React from 'react';
 import { Card, Button, Typography, Alert, Space, Tag } from 'antd';
-import { FoodItem } from '@/types/food';
+import { SimpleFoodItem } from '@/types/prisma';
 import { SettingOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
@@ -7,15 +8,14 @@ const { Title } = Typography;
 interface MainCardProps {
   currentFood: string;
   isRolling: boolean;
-  todayFood: FoodItem | null;
+  todayFood: SimpleFoodItem | null;
   canPick: boolean;
   onStartRolling: () => void;
   onConfirm: () => void;
   onManageFood: () => void;
-  onAddFood: () => void;
 }
 
-export const MainCard = ({
+export const MainCard: React.FC<MainCardProps> = ({
   currentFood,
   isRolling,
   todayFood,
@@ -23,7 +23,7 @@ export const MainCard = ({
   onStartRolling,
   onConfirm,
   onManageFood,
-}: MainCardProps) => {
+}) => {
   return (
     <Card
       className="w-full lg:w-auto lg:min-w-[450px] rounded-2xl backdrop-blur-xl bg-white/10 border-0 shadow-2xl"

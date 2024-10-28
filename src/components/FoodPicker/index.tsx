@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Typography } from 'antd';
-import { DEFAULT_FOODS } from '@/types/food';
+import { SimpleFoodItem, SimpleCategory } from '@/types/prisma';
 import { Background } from './Background';
 import { MainCard } from './MainCard';
 import { PreferenceSelector } from '@/components/PreferenceSelector';
@@ -10,7 +10,6 @@ import { AddFoodModal } from '@/components/AddFoodModal';
 import { HistoryList } from '@/components/HistoryList';
 import { useFoodPicker } from './hooks/useFoodPicker';
 import { FoodManager } from '@/components/FoodManager';
-import { FoodItem } from '@/types/food'; // Added import for FoodItem
 
 const { Title } = Typography;
 
@@ -42,17 +41,13 @@ const FoodPicker: React.FC = () => {
   const today = new Date().toLocaleDateString();
   const canPick = lastPickDate !== today;
 
-  const handleModalClose = () => {
+  const [isManagerOpen, setIsManagerOpen] = useState(false);
+
+  const handleModalClose = React.useCallback(() => {
     setIsModalOpen(false);
     setNewFood('');
     setNewCategory(categories[0]);
-  };
-
-  const handleAddFoodClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const [isManagerOpen, setIsManagerOpen] = useState(false);
+  }, [categories, setIsModalOpen, setNewFood, setNewCategory]);
 
   return (
     <div className="min-h-screen p-4 md:p-8 relative bg-gradient-to-br from-slate-900 to-slate-800 overflow-hidden">
@@ -66,7 +61,7 @@ const FoodPicker: React.FC = () => {
       <PreferenceSelector
         value={preferredCategories}
         onChange={handlePreferenceChange}
-        categories={categories.map(category => category.name)} // 将 Category 转换为 string[]
+        categories={categories}
         onCategoriesChange={handleCategoriesChange}
         foods={foods}
       />
@@ -75,11 +70,10 @@ const FoodPicker: React.FC = () => {
         <MainCard
           currentFood={currentFood}
           isRolling={isRolling}
-          todayFood={todayFood as FoodItem | null} // 强制转换类型
+          todayFood={todayFood}
           canPick={canPick}
           onStartRolling={startRolling}
           onConfirm={confirmTodayFood}
-          onAddFood={handleAddFoodClick}
           onManageFood={() => setIsManagerOpen(true)}
         />
 
@@ -92,8 +86,13 @@ const FoodPicker: React.FC = () => {
         onAdd={handleAddFood}
         foodName={newFood}
         onFoodNameChange={setNewFood}
-        category={newCategory}
-        onCategoryChange={setNewCategory}
+        category={newCategory?.id || ''}
+        onCategoryChange={id => {
+          const category = categories.find(c => c.id === id);
+          if (category) {
+            setNewCategory(category);
+          }
+        }}
         categories={categories}
       />
 
