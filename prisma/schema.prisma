@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  foods     Food[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Food {
+  id         String   @id @default(cuid())
+  name       String   @unique
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  History    History[]
+}
+
+model History {
+  id        String   @id @default(cuid())
+  food      Food     @relation(fields: [foodId], references: [id])
+  foodId    String
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+}
