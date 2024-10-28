@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { message } from 'antd';
 import type { SimpleFoodItem, SimpleCategory } from '@/types/prisma';
-import { getFoods, getCategories } from '@/services/foodService';
+import { getFoods, getCategories, createHistory } from '@/services/foodService';
 
 export const useFoodPicker = () => {
   const [currentFood, setCurrentFood] = useState<string>('点击开始');
@@ -56,7 +56,10 @@ export const useFoodPicker = () => {
       clearInterval(intervalRef.current);
     }
 
-    const filteredFoods = foods.filter(food => food.category === newCategory);
+    const filteredFoods =
+      preferredCategories.length > 0
+        ? foods.filter(food => preferredCategories.includes(food.categoryId))
+        : foods;
 
     if (filteredFoods.length === 0) {
       messageApi.warning('没有符合偏好的菜品，将使用所有菜品');
@@ -81,7 +84,7 @@ export const useFoodPicker = () => {
     }, 3000);
   };
 
-  const confirmTodayFood = () => {
+  const confirmTodayFood = async () => {
     const today = new Date().toLocaleDateString();
 
     if (lastPickDate === today) {
@@ -97,11 +100,10 @@ export const useFoodPicker = () => {
       }
 
       const foodItem: SimpleFoodItem = JSON.parse(currentSelectedFood);
+      await createHistory(foodItem.id);
       setTodayFood(foodItem);
+      setHistory(prev => [foodItem, ...prev].slice(0, 7));
       setLastPickDate(today);
-
-      localStorage.setItem('todayFood', JSON.stringify(foodItem));
-      localStorage.setItem('lastPickDate', today);
 
       messageApi.success('已确认今日美食！');
     } catch (error) {
@@ -110,9 +112,9 @@ export const useFoodPicker = () => {
     }
   };
 
-  const handleAddFood = () => {
-    if (!newFood.trim()) {
-      messageApi.warning('请输入菜品名称');
+  const handleAddFood = async () => {
+    if (!newFood.trim() || !newCategory) {
+      messageApi.warning('请输入菜品名称和选择分类');
       return;
     }
 
@@ -123,8 +125,10 @@ export const useFoodPicker = () => {
 
     try {
       const newFoodItem: SimpleFoodItem = {
+        id: '', // 这个ID会由服务器生成
         name: newFood.trim(),
-        category: newCategory,
+        categoryId: newCategory.id,
+        category: newCategory.name,
       };
       setFoods(prev => [...prev, newFoodItem]);
       messageApi.success('添加成功！');
@@ -141,7 +145,6 @@ export const useFoodPicker = () => {
     setPreferredCategories(values);
   };
 
-  // 添加分类管理函数
   const handleCategoriesChange = async (newCategories: SimpleCategory[]) => {
     try {
       setCategories(newCategories);

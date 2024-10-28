@@ -11,6 +11,7 @@ export interface Food extends PrismaFood {
   category?: Category;
   createdAt: Date;
   updatedAt: Date;
+  userId: string;
 }
 
 export interface Category extends PrismaCategory {
@@ -19,6 +20,7 @@ export interface Category extends PrismaCategory {
   foods?: Food[];
   createdAt: Date;
   updatedAt: Date;
+  userId: string;
 }
 
 export interface History extends PrismaHistory {
@@ -27,11 +29,14 @@ export interface History extends PrismaHistory {
   date: Date;
   createdAt: Date;
   food?: Food;
+  userId: string;
 }
 
-// 添加组件使用的简化类型
+// 组件使用的简化类型
 export interface SimpleFoodItem {
+  id: string;
   name: string;
+  categoryId: string;
   category: string;
 }
 

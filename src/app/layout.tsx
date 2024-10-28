@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 import { ConfigProvider, theme } from 'antd';
+import { UserProvider } from '@/contexts/UserContext';
 import './globals.css';
 
 const inter = Inter({
@@ -32,7 +33,7 @@ export default function RootLayout({
             // algorithm: theme.defaultAlgorithm,
           }}
         >
-          {children}
+          <UserProvider>{children}</UserProvider>
         </ConfigProvider>
       </body>
     </html>
