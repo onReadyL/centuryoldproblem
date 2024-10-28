@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import { Inter } from 'next/font/google';
 
-import { ConfigProvider, theme } from 'antd';
+import { ConfigProvider } from 'antd';
 import { UserProvider } from '@/contexts/UserContext';
 import './globals.css';
 

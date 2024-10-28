@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Table, Button, Space, Input, Select, Popconfirm, message } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { SimpleFoodItem, SimpleCategory } from '@/types/prisma';
 import { CategoryManager } from '@/components/CategoryManager';
 

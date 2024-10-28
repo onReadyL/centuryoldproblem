@@ -78,7 +78,7 @@ export const useFoodPicker = () => {
       }
       setIsRolling(false);
 
-      let finalFood = filteredFoods[Math.floor(Math.random() * filteredFoods.length)];
+      const finalFood = filteredFoods[Math.floor(Math.random() * filteredFoods.length)];
       setCurrentFood(finalFood.name);
       localStorage.setItem('currentSelectedFood', JSON.stringify(finalFood));
     }, 3000);

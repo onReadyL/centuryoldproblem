@@ -59,7 +59,7 @@ export const HistoryList = ({ history }: HistoryListProps) => {
       </div>
 
       {/* 滚动条样式 */}
-      <style jsx global>{`
+      <style>{`
         .ant-card-body::-webkit-scrollbar {
           width: 6px;
         }
