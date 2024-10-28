@@ -30,7 +30,7 @@ export const PreferenceSelector = ({
           className="backdrop-blur-md bg-white/10"
         />
         <CategoryManager
-          categories={categories}
+          categories={categories.map(category => category.id)} // 将 SimpleCategory[] 转换为 string[]
           onCategoriesChange={onCategoriesChange}
           foods={foods}
         />

@@ -33,6 +33,12 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
+      } else {
+        // 如果未登录且不在登录或注册页面，则重定向到登录页
+        const currentPath = window.location.pathname;
+        if (!['/login', '/register'].includes(currentPath)) {
+          router.push('/login');
+        }
       }
     } catch (error) {
       console.error('Auth check failed:', error);
@@ -56,13 +62,19 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const userData = await response.json();
     setUser(userData);
     router.push('/');
+    router.refresh(); // 强制刷新页面以确保状态更新
   };
 
   const logout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
     setUser(null);
     router.push('/login');
+    router.refresh(); // 强制刷新页面以确保状态更新
   };
+
+  if (loading) {
+    return <div>Loading...</div>; // 或者使用一个加载动画组件
+  }
 
   return (
     <UserContext.Provider value={{ user, loading, login, logout }}>{children}</UserContext.Provider>
