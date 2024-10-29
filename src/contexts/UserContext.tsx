@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Spin } from 'antd';
 
 interface User {
   id: string;
@@ -27,6 +28,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, []);
 
+  // 检查用户的认证状态
   const checkAuth = async () => {
     try {
       const response = await fetch('/api/auth/me');
@@ -47,6 +49,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // 用户登录函数
+  // 发送登录请求并处理响应
   const login = async (email: string, password: string) => {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
@@ -65,6 +69,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     router.refresh(); // 强制刷新页面以确保状态更新
   };
 
+  // 用户登出函数
+  // 发送登出请求并重置用户状态
   const logout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
     setUser(null);
@@ -73,7 +79,13 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // 或者使用一个加载动画组件
+    return (
+      <div
+        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}
+      >
+        <Spin tip="加载中..." /> {/* 使用一个加载动画组件 */}
+      </div>
+    );
   }
 
   return (
@@ -81,6 +93,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// 自定义 Hook，用于获取用户上下文
 export function useUser() {
   const context = useContext(UserContext);
   if (context === undefined) {

@@ -13,7 +13,7 @@ export const useFoodPicker = () => {
   const [newCategory, setNewCategory] = useState<SimpleCategory | null>(null);
   const [preferredCategories, setPreferredCategories] = useState<string[]>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = message.useMessage({ maxCount: 1 });
 
   const [foods, setFoods] = useState<SimpleFoodItem[]>([]);
   const [categories, setCategories] = useState<SimpleCategory[]>([]);
@@ -112,6 +112,24 @@ export const useFoodPicker = () => {
     }
   };
 
+  /**
+   * 处理添加新菜品的函数
+   *
+   * 1. 验证输入:
+   * - 检查菜品名称是否为空
+   * - 检查是否选择了分类
+   * - 检查菜品名称是否已存在
+   *
+   * 2. 创建新菜品:
+   * - 构建新菜品对象
+   * - 调用API保存菜品
+   * - 更新本地菜品列表
+   *
+   * 3. 重置表单:
+   * - 清空输入框
+   * - 重置分类选择
+   * - 关闭弹窗
+   */
   const handleAddFood = async () => {
     if (!newFood.trim() || !newCategory) {
       messageApi.warning('请输入菜品名称和选择分类');
@@ -130,7 +148,22 @@ export const useFoodPicker = () => {
         categoryId: newCategory.id,
         category: newCategory.name,
       };
-      setFoods(prev => [...prev, newFoodItem]);
+
+      // 调用创建菜品的接口
+      const response = await fetch('/api/foods', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newFoodItem),
+      });
+
+      if (!response.ok) {
+        throw new Error('添加菜品失败');
+      }
+
+      const savedFood = await response.json();
+      setFoods(prev => [...prev, savedFood]);
       messageApi.success('添加成功！');
       setNewFood('');
       setNewCategory(categories[0]);

@@ -25,9 +25,9 @@ export function getCurrentUser() {
   if (!token) {
     return null;
   }
-
   try {
-    return verify(token, JWT_SECRET) as { userId: string; email: string };
+    const result = verify(token, JWT_SECRET) as { userId: string; email: string };
+    return result;
   } catch {
     return null;
   }

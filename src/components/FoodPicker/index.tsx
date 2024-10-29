@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Typography } from 'antd';
-import { SimpleFoodItem, SimpleCategory } from '@/types/prisma';
+
 import { Background } from './Background';
 import { MainCard } from './MainCard';
 import { PreferenceSelector } from '@/components/PreferenceSelector';

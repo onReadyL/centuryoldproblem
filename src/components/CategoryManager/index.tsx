@@ -19,7 +19,7 @@ export const CategoryManager = ({
     null
   );
 
-  const handleAddCategory = () => {
+  const handleAddCategory = async () => {
     if (!newCategory.trim()) {
       message.warning('请输入分类名称');
       return;
@@ -30,12 +30,33 @@ export const CategoryManager = ({
       return;
     }
 
+    try {
+      const response = await fetch('/api/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: newCategory.trim() }),
+      });
+
+      if (!response.ok) {
+        message.warning('上传分类失败');
+        return;
+      }
+    } catch (error) {
+      message.error('上传分类失败');
+      return null;
+    }
+
     onCategoriesChange([...categories, newCategory.trim()]);
     setNewCategory('');
     message.success('添加成功');
+
+    // 同步到数据库
+    await syncCategoriesToDatabase([...categories, newCategory.trim()]);
   };
 
-  const handleEditCategory = (index: number, oldValue: string, newValue: string) => {
+  const handleEditCategory = async (index: number, oldValue: string, newValue: string) => {
     if (!newValue.trim()) {
       message.warning('分类名称不能为空');
       return;
@@ -51,9 +72,12 @@ export const CategoryManager = ({
     onCategoriesChange(newCategories);
     setEditingCategory(null);
     message.success('修改成功');
+
+    // 同步到数据库
+    await syncCategoriesToDatabase(newCategories);
   };
 
-  const handleDeleteCategory = (category: string) => {
+  const handleDeleteCategory = async (category: string) => {
     // 检查是否有菜品使用此分类
     const inUse = foods.some(food => food.category === category);
     if (inUse) {
@@ -64,6 +88,28 @@ export const CategoryManager = ({
     const newCategories = categories.filter(c => c !== category);
     onCategoriesChange(newCategories);
     message.success('删除成功');
+
+    // 同步到数据库
+    await syncCategoriesToDatabase(newCategories);
+  };
+
+  // 新增同步到数据库的函数
+  const syncCategoriesToDatabase = async (categories: string[]) => {
+    try {
+      const response = await fetch('/api/categories', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ categories }),
+      });
+
+      if (!response.ok) {
+        message.error('同步分类到数据库失败');
+      }
+    } catch (error) {
+      message.error('同步分类到数据库失败');
+    }
   };
 
   return (
