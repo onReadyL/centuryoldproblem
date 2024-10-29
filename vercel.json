@@ -1,0 +1,14 @@
+{
+    "version": 2,
+    "buildCommand": "npm run build",
+    "installCommand": "npm install",
+    "framework": "nextjs",
+    "regions": [
+        "sin1"
+    ],
+    "env": {
+        "POSTGRES_PRISMA_URL": "@postgres-prisma-url",
+        "NEXTAUTH_URL": "@nextauth-url",
+        "NEXTAUTH_SECRET": "@nextauth-secret"
+    }
+}
