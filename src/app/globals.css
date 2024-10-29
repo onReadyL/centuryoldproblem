@@ -5,9 +5,9 @@
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono',
-    'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro', 'Fira Mono', 'Droid Sans Mono',
-    'Courier New', monospace;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 }
 
 * {
@@ -31,15 +31,15 @@ body {
   .food-picker-card {
     @apply min-w-[450px] rounded-2xl backdrop-blur-md;
   }
-
+  
   .history-card {
     @apply min-w-[350px] rounded-2xl backdrop-blur-md;
   }
-
+  
   .action-button {
     @apply h-12 px-8 text-lg rounded-full;
   }
-
+  
   .date-label {
     @apply inline-block px-2 py-0.5 mr-3 text-sm bg-blue-50 text-blue-600 rounded;
   }

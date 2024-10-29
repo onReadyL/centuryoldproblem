@@ -30,8 +30,15 @@ export const PreferenceSelector = ({
           className="backdrop-blur-md bg-white/10"
         />
         <CategoryManager
-          categories={categories.map(category => category.id)} // 将 SimpleCategory[] 转换为 string[]
-          onCategoriesChange={onCategoriesChange}
+          categories={categories.map(c => c.name)}
+          onCategoriesChange={newNames => {
+            // 将名称数组转换为 SimpleCategory 数组
+            const newCategories = newNames.map((name, index) => ({
+              id: categories[index]?.id || `temp-${index}`,
+              name,
+            }));
+            onCategoriesChange(newCategories);
+          }}
           foods={foods}
         />
       </Space.Compact>

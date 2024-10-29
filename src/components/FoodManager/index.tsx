@@ -31,7 +31,9 @@ export const FoodManager: React.FC<FoodManagerProps> = ({
   const [editingFood, setEditingFood] = useState<EditingFood | null>(null);
   const [newFood, setNewFood] = useState<SimpleFoodItem>({
     name: '',
-    category: categories[0].name,
+    category: categories[0]?.name,
+    id: '',
+    categoryId: '',
   });
   const [isAddMode, setIsAddMode] = useState(false);
 
@@ -101,8 +103,8 @@ export const FoodManager: React.FC<FoodManagerProps> = ({
       return;
     }
 
-    onFoodsChange([...foods, { ...newFood, name: newFood.name.trim() }]);
-    setNewFood({ name: '', category: categories[0].name });
+    onFoodsChange([...foods, { ...newFood, name: newFood.name.trim(), id: '', categoryId: '' }]);
+    setNewFood({ name: '', category: categories[0].name, id: '', categoryId: '' });
     setIsAddMode(false);
     message.success('添加成功');
   };
@@ -151,7 +153,7 @@ export const FoodManager: React.FC<FoodManagerProps> = ({
     {
       title: '操作',
       key: 'action',
-      render: (_: any, record: SimpleFoodItem, index: number) =>
+      render: (_: '', record: SimpleFoodItem, index: number) =>
         editingFood?.index === index ? (
           <Space>
             <Button type="primary" size="small" onClick={handleSaveEdit}>

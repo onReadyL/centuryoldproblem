@@ -1,6 +1,6 @@
 import FoodPicker from '@/components/FoodPicker/index';
 
-export default function Home() {
+export default async function Home() {
   return (
     <main>
       <FoodPicker />

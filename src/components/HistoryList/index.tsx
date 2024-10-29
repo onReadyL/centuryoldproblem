@@ -21,6 +21,7 @@ export const HistoryList = ({ history }: HistoryListProps) => {
       }
       className="w-full lg:w-auto lg:min-w-[350px] rounded-2xl backdrop-blur-xl bg-white/10 border-0 shadow-2xl mt-4 lg:mt-0 overflow-hidden"
       bordered={false}
+      bodyStyle={{ maxHeight: '400px', overflowY: 'auto' }}
     >
       <div className="space-y-2">
         {history.length > 0 ? (
@@ -58,23 +59,25 @@ export const HistoryList = ({ history }: HistoryListProps) => {
         )}
       </div>
 
-      {/* 滚动条样式 */}
-      <style>{`
-        .ant-card-body::-webkit-scrollbar {
-          width: 6px;
-        }
-        .ant-card-body::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 3px;
-        }
-        .ant-card-body::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 3px;
-        }
-        .ant-card-body::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.3);
-        }
-      `}</style>
+      {/* 使用 CSS Modules 或 Tailwind 替代 jsx global */}
+      <style>
+        {`
+          .ant-card-body::-webkit-scrollbar {
+            width: 6px;
+          }
+          .ant-card-body::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+          }
+          .ant-card-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+          }
+          .ant-card-body::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+          }
+        `}
+      </style>
     </Card>
   );
 };

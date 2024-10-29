@@ -93,7 +93,7 @@ const FoodPicker: React.FC = () => {
             setNewCategory(category);
           }
         }}
-        categories={categories}
+        categories={categories.map(c => c.name)}
       />
 
       <FoodManager

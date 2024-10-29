@@ -40,10 +40,10 @@ export async function POST(request: Request) {
 
     // 为新用户创建默认分类
     await Promise.all(
-      DEFAULT_CATEGORIES.map(categoryName =>
+      DEFAULT_CATEGORIES.map(category =>
         prisma.category.create({
           data: {
-            name: categoryName,
+            name: category,
             userId: user.id,
           },
         })

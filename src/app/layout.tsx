@@ -1,14 +1,11 @@
 import type { Metadata } from 'next';
-
 import { Inter } from 'next/font/google';
-
 import { ConfigProvider } from 'antd';
-import { UserProvider } from '@/contexts/UserContext';
+import { Providers } from '@/components/Providers';
 import './globals.css';
+import { UserProvider } from '@/contexts/UserContext';
 
-const inter = Inter({
-  subsets: ['latin'],
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: '今天吃什么',
@@ -23,18 +20,21 @@ export default function RootLayout({
   return (
     <html lang="zh">
       <body className={inter.className}>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: '#1677ff',
-              borderRadius: 8,
-              fontFamily: inter.style.fontFamily,
-            },
-            // algorithm: theme.defaultAlgorithm,
-          }}
-        >
-          <UserProvider>{children}</UserProvider>
-        </ConfigProvider>
+        <Providers>
+          <UserProvider>
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: '#1677ff',
+                  borderRadius: 8,
+                  fontFamily: inter.style.fontFamily,
+                },
+              }}
+            >
+              {children}
+            </ConfigProvider>
+          </UserProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -34,9 +34,9 @@ export interface History extends PrismaHistory {
 
 // 组件使用的简化类型
 export interface SimpleFoodItem {
-  id?: string;
+  id: string;
   name: string;
-  categoryId?: string;
+  categoryId: string;
   category: string;
 }
 

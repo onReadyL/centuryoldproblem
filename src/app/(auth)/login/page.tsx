@@ -2,13 +2,12 @@
 
 import { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUser } from '@/contexts/UserContext';
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+
   const { login } = useUser();
 
   const onFinish = async (values: { email: string; password: string }) => {
@@ -16,8 +15,7 @@ export default function Login() {
     try {
       await login(values.email, values.password);
       message.success('登录成功！');
-      router.push('/');
-      router.refresh(); // 强制刷新页面以确保状态更新
+      // login 函数内部已经包含了重定向逻辑,这里不需要重复
     } catch (error) {
       message.error(error instanceof Error ? error.message : '登录失败，请重试');
     } finally {

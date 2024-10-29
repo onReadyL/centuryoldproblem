@@ -56,18 +56,18 @@ export const useFoodPicker = () => {
       clearInterval(intervalRef.current);
     }
 
-    const filteredFoods =
+    let availableFoods =
       preferredCategories.length > 0
         ? foods.filter(food => preferredCategories.includes(food.categoryId))
         : foods;
 
-    if (filteredFoods.length === 0) {
+    if (availableFoods.length === 0) {
       messageApi.warning('没有符合偏好的菜品，将使用所有菜品');
-      return;
+      availableFoods = foods;
     }
 
     intervalRef.current = setInterval(() => {
-      const randomFood = filteredFoods[Math.floor(Math.random() * filteredFoods.length)];
+      const randomFood = availableFoods[Math.floor(Math.random() * availableFoods.length)];
       setCurrentFood(randomFood.name);
     }, 100);
 
@@ -78,7 +78,7 @@ export const useFoodPicker = () => {
       }
       setIsRolling(false);
 
-      const finalFood = filteredFoods[Math.floor(Math.random() * filteredFoods.length)];
+      const finalFood = availableFoods[Math.floor(Math.random() * availableFoods.length)];
       setCurrentFood(finalFood.name);
       localStorage.setItem('currentSelectedFood', JSON.stringify(finalFood));
     }, 3000);
